@@ -1,0 +1,51 @@
+/* Additional styles for enhanced mobile experience */
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.smiley-btn, .operation-btn {
+    min-height: 50px;
+    font-size: 1.8em;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.smiley-btn:active, .operation-btn:active {
+    transform: scale(0.95);
+}
+
+.number-display, .operation-display {
+    min-height: 70px;
+    font-size: 1.8em;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .header h1 {
+        font-size: 2em;
+    }
+    
+    .smiley-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .smiley-btn {
+        padding: 12px;
+        font-size: 1.5em;
+    }
+    
+    .operation-btn {
+        padding: 12px;
+        font-size: 1.8em;
+    }
+    
+    .btn {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
