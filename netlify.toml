@@ -1,8 +1,8 @@
 # Netlify Configuration for Smiley Calculator
 
 [build]
-  publish = "."
-  command = "echo 'Static site - no build needed'"
+  publish = "dist"
+  command = "mkdir -p dist && cp index.html dist/ && cp help.html dist/ && cp -r static dist/ 2>/dev/null || true"
 
 [[headers]]
   for = "/*"
