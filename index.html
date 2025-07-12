@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮✨ Smiley Calculator ✨🧮</title>
+    <meta name="description" content="A fun, interactive calculator that uses emojis instead of numbers. Click on smiley faces to calculate!">
+    <meta name="keywords" content="calculator, emoji, smiley, math, fun, interactive">
+    
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="🧮✨ Smiley Calculator ✨🧮">
+    <meta property="og:description" content="A revolutionary calculator that uses smilies instead of numbers and operations!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-netlify-url.netlify.app">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧮</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+        
+        .calculator {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #333;
+        }
+        
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .number-input {
+            text-align: center;
+        }
+        
+        .number-input label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .number-display {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 2em;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: #333;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .smiley-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .smiley-btn {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .smiley-btn:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+            transform: translateY(-2px);
+        }
+        
+        .smiley-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .operation-section {
+            text-align: center;
+        }
+        
+        .operation-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .operation-display {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 3em;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .operation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .operation-btn {
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .operation-btn:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+            transform: translateY(-2px);
+        }
+        
+        .operation-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .operation-btn.selected {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+        
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .result-title {
+            text-align: center;
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .result-display {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .result-explanation {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        
+        .decimal-btn {
+            background: #ffc107;
+            color: #333;
+            border: 2px solid #ffc107;
+        }
+        
+        .decimal-btn:hover {
+            background: #e0a800;
+            border-color: #e0a800;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .smiley-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .operation-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .smiley-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .smiley-btn {
+                padding: 12px;
+                font-size: 1.3em;
+            }
+            
+            .operation-btn {
+                padding: 12px;
+                font-size: 1.8em;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮✨ Smiley Calculator ✨🧮</h1>
+            <p>Click on smileys to calculate! No typing required!</p>
+        </div>
+        
+        <div class="calculator">
+            <div class="display" id="mainDisplay">
+                Click smileys below to start calculating! 😊
+            </div>
+            
+            <div class="input-section">
+                <!-- First Number -->
+                <div class="number-input">
+                    <label>First Number:</label>
+                    <div class="number-display" id="num1Display">Select smileys...</div>
+                    <div class="smiley-grid">
+                        <button class="smiley-btn" data-type="number" data-value="😀" data-number="0">😀</button>
+                        <button class="smiley-btn" data-type="number" data-value="😊" data-number="1">😊</button>
+                        <button class="smiley-btn" data-type="number" data-value="😁" data-number="2">😁</button>
+                        <button class="smiley-btn" data-type="number" data-value="😂" data-number="3">😂</button>
+                        <button class="smiley-btn" data-type="number" data-value="😃" data-number="4">😃</button>
+                        <button class="smiley-btn" data-type="number" data-value="😄" data-number="5">😄</button>
+                        <button class="smiley-btn" data-type="number" data-value="😆" data-number="6">😆</button>
+                        <button class="smiley-btn" data-type="number" data-value="😇" data-number="7">😇</button>
+                        <button class="smiley-btn" data-type="number" data-value="😈" data-number="8">😈</button>
+                        <button class="smiley-btn" data-type="number" data-value="😉" data-number="9">😉</button>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="smiley-btn decimal-btn" data-type="decimal" data-value=".">.</button>
+                        <button class="clear-btn" onclick="clearNumber('num1')">Clear</button>
+                    </div>
+                </div>
+                
+                <!-- Operation -->
+                <div class="operation-section">
+                    <label>Operation:</label>
+                    <div class="operation-display" id="operationDisplay">?</div>
+                    <div class="operation-grid">
+                        <button class="operation-btn" data-type="operation" data-value="➕" data-operation="add">➕</button>
+                        <button class="operation-btn" data-type="operation" data-value="➖" data-operation="subtract">➖</button>
+                        <button class="operation-btn" data-type="operation" data-value="✖️" data-operation="multiply">✖️</button>
+                        <button class="operation-btn" data-type="operation" data-value="➗" data-operation="divide">➗</button>
+                    </div>
+                </div>
+                
+                <!-- Second Number -->
+                <div class="number-input">
+                    <label>Second Number:</label>
+                    <div class="number-display" id="num2Display">Select smileys...</div>
+                    <div class="smiley-grid">
+                        <button class="smiley-btn" data-type="number" data-value="😀" data-number="0">😀</button>
+                        <button class="smiley-btn" data-type="number" data-value="😊" data-number="1">😊</button>
+                        <button class="smiley-btn" data-type="number" data-value="😁" data-number="2">😁</button>
+                        <button class="smiley-btn" data-type="number" data-value="😂" data-number="3">😂</button>
+                        <button class="smiley-btn" data-type="number" data-value="😃" data-number="4">😃</button>
+                        <button class="smiley-btn" data-type="number" data-value="😄" data-number="5">😄</button>
+                        <button class="smiley-btn" data-type="number" data-value="😆" data-number="6">😆</button>
+                        <button class="smiley-btn" data-type="number" data-value="😇" data-number="7">😇</button>
+                        <button class="smiley-btn" data-type="number" data-value="😈" data-number="8">😈</button>
+                        <button class="smiley-btn" data-type="number" data-value="😉" data-number="9">😉</button>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="smiley-btn decimal-btn" data-type="decimal" data-value=".">.</button>
+                        <button class="clear-btn" onclick="clearNumber('num2')">Clear</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="calculate()">🧮 Calculate</button>
+                <button class="btn btn-secondary" onclick="clearAll()">🗑️ Clear All</button>
+                <a href="help.html" class="btn btn-info">❓ Help</a>
+            </div>
+            
+            <div class="result-section" id="resultSection" style="display: none;">
+                <div class="result-title">🎉 Result:</div>
+                <div class="result-display" id="resultDisplay"></div>
+                <div class="result-explanation" id="resultExplanation"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Made with ❤️ using emojis | <a href="https://github.com/CitizenBruceLee/Calculator" target="_blank">View on GitHub</a></p>
+        </div>
+    </div>
+    
+    <script>
+        // Smiley Calculator Logic - Static Version
+        class SmileyCalculator {
+            constructor() {
+                this.numbers = {
+                    '😀': 0, '😊': 1, '😁': 2, '😂': 3, '😃': 4,
+                    '😄': 5, '😆': 6, '😇': 7, '😈': 8, '😉': 9
+                };
+                
+                this.operations = {
+                    '➕': 'add',
+                    '➖': 'subtract', 
+                    '✖️': 'multiply',
+                    '➗': 'divide'
+                };
+                
+                this.reverseNumbers = {};
+                for (let [smiley, number] of Object.entries(this.numbers)) {
+                    this.reverseNumbers[number] = smiley;
+                }
+            }
+            
+            smileyToNumber(smileyString) {
+                if (!smileyString) return 0;
+                
+                if (smileyString.includes('.')) {
+                    const [integerPart, decimalPart] = smileyString.split('.');
+                    const integerValue = this.convertSmileyDigits(integerPart);
+                    const decimalValue = this.convertSmileyDigits(decimalPart);
+                    return integerValue + decimalValue / Math.pow(10, decimalPart.length);
+                } else {
+                    return this.convertSmileyDigits(smileyString);
+                }
+            }
+            
+            convertSmileyDigits(smileyString) {
+                let result = 0;
+                for (let smiley of smileyString) {
+                    if (smiley in this.numbers) {
+                        result = result * 10 + this.numbers[smiley];
+                    } else if (smiley !== '.') {
+                        throw new Error(`Unknown smiley digit: ${smiley}`);
+                    }
+                }
+                return result;
+            }
+            
+            numberToSmiley(number) {
+                if (number === parseInt(number)) {
+                    number = parseInt(number);
+                }
+                
+                const numberStr = number.toString();
+                let smileyResult = "";
+                
+                for (let char of numberStr) {
+                    if (/\d/.test(char)) {
+                        smileyResult += this.reverseNumbers[parseInt(char)];
+                    } else if (char === '.') {
+                        smileyResult += '.';
+                    } else if (char === '-') {
+                        smileyResult += '➖';
+                    }
+                }
+                
+                return smileyResult;
+            }
+            
+            calculate(num1Smiley, operationSmiley, num2Smiley) {
+                try {
+                    const num1 = this.smileyToNumber(num1Smiley);
+                    const num2 = this.smileyToNumber(num2Smiley);
+                    
+                    let result;
+                    switch (operationSmiley) {
+                        case '➕':
+                            result = num1 + num2;
+                            break;
+                        case '➖':
+                            result = num1 - num2;
+                            break;
+                        case '✖️':
+                            result = num1 * num2;
+                            break;
+                        case '➗':
+                            if (num2 === 0) {
+                                throw new Error("Cannot divide by zero! 🚫");
+                            }
+                            result = num1 / num2;
+                            break;
+                        default:
+                            throw new Error(`Unknown operation: ${operationSmiley}`);
+                    }
+                    
+                    return this.numberToSmiley(result);
+                } catch (error) {
+                    throw new Error(`Calculation error: ${error.message}`);
+                }
+            }
+        }
+        
+        // Initialize calculator
+        const calc = new SmileyCalculator();
+        let currentNum1 = '';
+        let currentNum2 = '';
+        let currentOperation = '';
+        let activeNumber = 'num1';
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to smiley buttons
+            document.querySelectorAll('.smiley-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    const value = this.getAttribute('data-value');
+                    
+                    if (type === 'number' || type === 'decimal') {
+                        addToCurrentNumber(value);
+                    }
+                });
+            });
+            
+            // Add event listeners to operation buttons
+            document.querySelectorAll('.operation-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    selectOperation(value);
+                });
+            });
+            
+            // Click on number displays to switch focus
+            document.getElementById('num1Display').addEventListener('click', function() {
+                activeNumber = 'num1';
+                updateInputFocus();
+            });
+            
+            document.getElementById('num2Display').addEventListener('click', function() {
+                activeNumber = 'num2';
+                updateInputFocus();
+            });
+            
+            // Initialize focus
+            updateInputFocus();
+        });
+        
+        function selectOperation(smiley) {
+            currentOperation = smiley;
+            document.getElementById('operationDisplay').textContent = smiley;
+            
+            // Clear previous selection
+            document.querySelectorAll('.operation-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Highlight selected operation
+            document.querySelector(`[data-value="${smiley}"]`).classList.add('selected');
+            
+            // Switch to second number input
+            activeNumber = 'num2';
+            updateInputFocus();
+            updateDisplay();
+        }
+        
+        function addToCurrentNumber(value) {
+            if (activeNumber === 'num1') {
+                currentNum1 += value;
+                document.getElementById('num1Display').textContent = currentNum1 || 'Select smileys...';
+            } else {
+                currentNum2 += value;
+                document.getElementById('num2Display').textContent = currentNum2 || 'Select smileys...';
+            }
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            let displayText = '';
+            
+            if (currentNum1) {
+                displayText += currentNum1;
+            }
+            if (currentOperation) {
+                displayText += ' ' + currentOperation + ' ';
+            }
+            if (currentNum2) {
+                displayText += currentNum2;
+            }
+            
+            if (displayText) {
+                document.getElementById('mainDisplay').textContent = displayText;
+            } else {
+                document.getElementById('mainDisplay').textContent = 'Click smileys below to start calculating! 😊';
+            }
+        }
+        
+        function updateInputFocus() {
+            const num1Display = document.getElementById('num1Display');
+            const num2Display = document.getElementById('num2Display');
+            
+            if (activeNumber === 'num1') {
+                num1Display.style.borderColor = '#007bff';
+                num2Display.style.borderColor = '#dee2e6';
+            } else {
+                num2Display.style.borderColor = '#007bff';
+                num1Display.style.borderColor = '#dee2e6';
+            }
+        }
+        
+        function clearNumber(which) {
+            if (which === 'num1') {
+                currentNum1 = '';
+                document.getElementById('num1Display').textContent = 'Select smileys...';
+                activeNumber = 'num1';
+            } else {
+                currentNum2 = '';
+                document.getElementById('num2Display').textContent = 'Select smileys...';
+                activeNumber = 'num2';
+            }
+            updateInputFocus();
+            updateDisplay();
+        }
+        
+        function clearAll() {
+            currentNum1 = '';
+            currentNum2 = '';
+            currentOperation = '';
+            activeNumber = 'num1';
+            
+            document.getElementById('num1Display').textContent = 'Select smileys...';
+            document.getElementById('num2Display').textContent = 'Select smileys...';
+            document.getElementById('operationDisplay').textContent = '?';
+            document.getElementById('mainDisplay').textContent = 'Click smileys below to start calculating! 😊';
+            document.getElementById('resultSection').style.display = 'none';
+            
+            // Clear all selections
+            document.querySelectorAll('.operation-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            updateInputFocus();
+        }
+        
+        function calculate() {
+            if (!currentNum1 || !currentOperation || !currentNum2) {
+                alert('❌ Please select both numbers and an operation!');
+                return;
+            }
+            
+            try {
+                const result = calc.calculate(currentNum1, currentOperation, currentNum2);
+                
+                // Convert to regular numbers for display
+                const num1Regular = calc.smileyToNumber(currentNum1);
+                const num2Regular = calc.smileyToNumber(currentNum2);
+                const resultRegular = calc.smileyToNumber(result);
+                const opName = calc.operations[currentOperation];
+                
+                document.getElementById('resultDisplay').textContent = result;
+                document.getElementById('resultExplanation').textContent = 
+                    `${num1Regular} ${opName} ${num2Regular} = ${resultRegular}`;
+                document.getElementById('resultSection').style.display = 'block';
+                
+                // Scroll to result
+                document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
